@@ -4,6 +4,17 @@
 //      *Defeat each enemy robot
 //"LOSE" - Player robot's health is zero or less
 
+// High Score
+// When the game has ended and we've survived facing all the robots:
+//  * Retrieve the current high score from localStorage
+//  * Compare the player-robot score with the current high score
+//  * If the current high score is higher:
+//      * Send player the message that the player did not beat the high score
+//  * If the player score is higher
+//      * Set new high score object into localStorage
+//      * Set new player-robot's name object into localStorage
+//      * Send player the message that they beat the high score
+
 var fightOrSkip = function() {
     // Fight?
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
@@ -144,8 +155,23 @@ var startGame = function() {
             window.alert("You've lost your robot in battle.");
         }
 
-        // ask the player if they'd like to play again
+        // check localStorage for high score, if it's not there, use 0
+        var highScore = localStorage.getItem("highScore");
+        if (highScore === null) {
+            highScore = 0;
+        }
 
+        // if player has more money than the high score, player has new high score
+        if (playerInfo.money > highScore) {
+            localStorage.setItem("highscore", playerInfo.money);
+            localStorage.setItem("name", playerInfo.name);
+
+            alert(playerInfo.name + " now has the high score of " + playerInfo.money + "!");
+        } else {
+            alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
+        }
+
+        // ask the player if they'd like to play again
         var playAgainConfirm = window.confirm("Would you like to play again?");
 
         if (playAgainConfirm) {
