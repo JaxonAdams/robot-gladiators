@@ -4,30 +4,42 @@
 //      *Defeat each enemy robot
 //"LOSE" - Player robot's health is zero or less
 
+var fightOrSkip = function() {
+    // Fight?
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+
+    promptFight = promptFight.toLowerCase();
+
+    // conditional recursive function call
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again!");
+        return fightOrSkip();
+    }
+
+     // If skip ...
+     if (promptFight === "skip") {
+        // confirm skip
+        var confirmSkip = window.confirm("Are you sure you'd like to skip this fight?");
+
+        // If yes (true), leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            // Subtract money from playerInfo.money for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+            console.log("playerInfo.money" , playerInfo.money);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 var fight = function(enemy) {
 
     while(playerInfo.health > 0 && enemy.health > 0) {
-        // Fight?
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-
-        // If skip ...
-        if (promptFight === "skip" || promptFight === "SKIP" || promptFight === "Skip") {
-            // confirm skip
-            var confirmSkip = window.confirm("Are you sure you'd like to skip this fight?");
-
-            // If yes (true), leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                // Subtract money from playerInfo.money for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money" , playerInfo.money);
-                break;
-            }
-
-            // If no (false) ask question again by running fight() again
-            else {
-                fight();
-            }
+        
+        if (fightOrSkip()) {
+            break;
         }
 
         // generate random damage value based on player's attack power
